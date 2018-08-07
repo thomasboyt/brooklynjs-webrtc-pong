@@ -9,7 +9,7 @@ type PeerId = string;
  * A host connection multiplexes connections to various peers and can send and
  * receive messages to/from any of them.
  */
-export default class HostConnection {
+export default class HostSession {
   private _signaling!: SignalingClient;
   private _peerSockets = new Map<PeerId, PeerSocket>();
   private _signalingServerUrl: string;

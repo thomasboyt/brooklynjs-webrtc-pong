@@ -2,7 +2,7 @@ import SignalingClient from './signaling/SignalingClient';
 import PeerSocket from './PeerSocket';
 import debugLog from './util/debugLog';
 
-export default class ClientConnection {
+export default class ClientSession {
   private _signaling!: SignalingClient;
   private _hostSocket!: PeerSocket;
   private _signalingServerUrl: string;
