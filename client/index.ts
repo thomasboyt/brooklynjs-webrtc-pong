@@ -6,33 +6,8 @@ import render from './render';
 import { WIDTH, HEIGHT } from './constants';
 import ClientSession from './networking/ClientSession';
 import ClientGame from './ClientGame';
-
-function setupCanvas() {
-  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  const pixelRatio = window.devicePixelRatio || 1;
-  canvas.width = WIDTH * pixelRatio;
-  canvas.height = HEIGHT * pixelRatio;
-  canvas.style.width = `${WIDTH}px`;
-  canvas.style.height = `${HEIGHT}px`;
-  const ctx = canvas.getContext('2d')!;
-  ctx.imageSmoothingEnabled = false;
-  ctx.scale(pixelRatio, pixelRatio);
-  return ctx;
-}
-
-function showRoomCode(roomCode: string) {
-  const url =
-    document.location.origin +
-    document.location.pathname +
-    `?roomCode=${roomCode}`;
-  console.log('link', url);
-
-  const roomLink = document.querySelector('a.room-link');
-  if (roomLink instanceof HTMLAnchorElement) {
-    roomLink.href = url;
-    roomLink.innerText = url;
-  }
-}
+import setupCanvas from './util/setupCanvas';
+import showRoomLink from './showRoomLink';
 
 interface CreateGameOptions {
   isHost: boolean;
@@ -40,31 +15,30 @@ interface CreateGameOptions {
 }
 
 async function createGame(opts: CreateGameOptions) {
-  const ctx = setupCanvas();
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  const ctx = setupCanvas(canvas, WIDTH, HEIGHT);
+
+  let game: HostGame | ClientGame;
 
   if (opts.isHost) {
     const session = new HostSession(process.env.LOBBY_SERVER!);
     const roomCode = await session.getRoomCode();
-    showRoomCode(roomCode);
+    showRoomLink(roomCode);
     session.connectRoom(roomCode);
-
-    const game = new HostGame(session);
-    const ticker = new Ticker((dt) => {
-      game.update(dt);
-      render(ctx, game.state);
-    });
+    game = new HostGame(session);
   } else {
     const session = new ClientSession(process.env.LOBBY_SERVER!);
     await session.connectRoom(opts.roomCode!);
-    const game = new ClientGame(session);
-    const ticker = new Ticker((dt) => {
-      game.update(dt);
-      // TODO: show loading message
-      if (game.state) {
-        render(ctx, game.state);
-      }
-    });
+    game = new ClientGame(session);
   }
+
+  const ticker = new Ticker((dt) => {
+    game.update(dt);
+    // TODO: show loading message
+    if (game.state) {
+      render(ctx, game.state);
+    }
+  });
 }
 
 const params = new URLSearchParams(document.location.search.slice(1));
