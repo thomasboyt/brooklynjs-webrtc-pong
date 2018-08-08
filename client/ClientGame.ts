@@ -31,10 +31,10 @@ export default class ClientGame {
     };
   }
 
-  sendMoveUpdate(yPos: number) {
+  sendMoveUpdate(deltaY: number) {
     const msg: MoveMessage = {
       type: 'move',
-      yPos,
+      deltaY,
     };
 
     this.session.send(JSON.stringify(msg));
@@ -49,12 +49,10 @@ export default class ClientGame {
     // read local input and move paddle
     const step = dt * 0.1;
     if (this.inputter.keysDown.has(Keys.upArrow)) {
-      const yPos = this.state.opponentPaddlePosition![1] - step;
-      this.sendMoveUpdate(yPos);
+      this.sendMoveUpdate(-step);
     }
     if (this.inputter.keysDown.has(Keys.downArrow)) {
-      const yPos = this.state.opponentPaddlePosition![1] + step;
-      this.sendMoveUpdate(yPos);
+      this.sendMoveUpdate(step);
     }
   }
 }

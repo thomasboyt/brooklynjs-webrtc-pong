@@ -11,7 +11,7 @@ export interface SnapshotMessage extends BaseMessage {
 
 export interface MoveMessage extends BaseMessage {
   type: 'move';
-  yPos: number;
+  deltaY: number;
 }
 
 export type HostMessage = SnapshotMessage;

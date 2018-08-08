@@ -36,7 +36,7 @@ export default class HostGame {
       if (peerId === this.opponentPeerId) {
         const msg = JSON.parse(message) as ClientMessage;
         if (msg.type === 'move') {
-          this.state.opponentPaddlePosition = [300, msg.yPos];
+          this.state.opponentPaddlePosition![1] += msg.deltaY;
         }
       }
     };
