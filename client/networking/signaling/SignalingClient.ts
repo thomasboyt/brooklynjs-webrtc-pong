@@ -95,7 +95,4 @@ export default class SignalingClient {
       },
     });
   }
-
-  // uploadSnapshot(snapshot: string) {
-  // }
 }
