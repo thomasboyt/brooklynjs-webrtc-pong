@@ -14,7 +14,7 @@ export default function render(
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-  const drawPaddle = ([x, y]: [number, number]) => {
+  const drawPaddle = ({ x, y }: { x: number; y: number }) => {
     ctx.fillStyle = 'white';
     ctx.fillRect(
       x - PADDLE_WIDTH / 2,
@@ -24,7 +24,7 @@ export default function render(
     );
   };
 
-  const drawBall = ([x, y]: [number, number]) => {
+  const drawBall = ({ x, y }: { x: number; y: number }) => {
     ctx.fillStyle = 'white';
     ctx.beginPath();
     ctx.arc(x, y, BALL_RADIUS, 0, 2 * Math.PI);

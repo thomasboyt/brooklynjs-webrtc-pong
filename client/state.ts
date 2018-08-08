@@ -1,10 +1,12 @@
+import { Vector2 } from './util/vectorMaths';
+
 export interface BaseState {
-  hostPaddlePosition: [number, number];
-  opponentPaddlePosition?: [number, number];
-  ballPosition: [number, number];
+  hostPaddlePosition: Vector2;
+  opponentPaddlePosition?: Vector2;
+  ballPosition: Vector2;
 }
 
 export interface HostState extends BaseState {
   ballSpeed: number;
-  ballVector: [number, number];
+  ballVector: Vector2;
 }
