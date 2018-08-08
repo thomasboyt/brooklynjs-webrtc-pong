@@ -59,7 +59,6 @@ export default class HostGame {
         delete this.opponentPeerId;
       }
     };
-    this.startBallMoving();
   }
 
   update(dt: number) {
@@ -83,7 +82,8 @@ export default class HostGame {
   private startBallMoving() {
     this.state.ballPosition = { x: WIDTH / 2, y: HEIGHT / 2 };
     this.state.ballSpeed = 0.1;
-    this.state.ballVector = { x: -1, y: 0 };
+    const startingX = Math.random() > 0.5 ? 1 : -1;
+    this.state.ballVector = { x: startingX, y: 0 };
   }
 
   private moveBallAndCheckCollisions(dt: number) {
