@@ -1,0 +1,52 @@
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+* {
+  box-sizing: border-box;
+}
+.remark-slide-content h1,
+.remark-slide-content h2,
+.remark-slide-content h3,
+.remark-slide-content h4 {
+  text-align: center;
+  margin-top: 0px;
+  color: #E42155
+}
+
+body:not(.remark-presenter-mode) {
+  background: white;
+}
+body:not(.remark-presenter-mode) .remark-slide-scaler {
+  box-shadow: none;
+}
+
+.remark-slide-content {
+  font-family: 'Inconsolata', monospace;
+  padding: 40px 100px;
+}
+.remark-code,
+.remark-inline-code {
+  font-family: 'Ubuntu Mono', monospace;
+}
+
+.remark-slide-content p,
+.remark-slide-content li {
+  font-size: 30px;
+  line-height: 1.5em;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+.remark-slide-content ul > li:first-child {
+  margin-top: 0.5em;
+}
+
+.remark-slide-content a,
+.remark-slide-content a:hover
+.remark-slide-content a:visited {
+  color: #E42155
+}
+
+.remark-slide-content a:hover {
+  text-decoration: none;
+}
