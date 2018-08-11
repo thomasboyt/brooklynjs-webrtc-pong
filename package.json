@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "webpack-serve --config webpack/webpack.dev.js",
     "build": "webpack --config webpack/webpack.production.js",
-    "deploy": "LOBBY_SERVER=groovejet.disco.zone npm run build && cp static/** dist && ./deploy.sh"
+    "deploy": "LOBBY_SERVER=groovejet.disco.zone npm run build && cp static/** dist && disco-deploy dist/ pong",
+    "deploy-talk": "disco-deploy talk/ talk"
   },
   "author": "",
   "license": "MIT",
