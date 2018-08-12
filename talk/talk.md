@@ -2,7 +2,7 @@ class: middle, center
 
 # Building a peer-to-peer video game with WebRTC!
 
-### Thomas Boyt &middot; BrooklynJS August 2018
+### .title-slide-subhead[Thomas Boyt &middot; BrooklynJS August 2018]
 
 ---
 
@@ -18,15 +18,25 @@ class: middle, center
 ???
 
 * Quick show of hands, how many people here have heard of WebRTC?
-* Peer to peer = without server
+* Peer to peer = without intermediary server
+
+---
+
+# WebRTC for Games?
+
+* Peer to peer games are very common!
+  * Everything from Call of Duty to Diablo
+  * One player acts as a "host" that all other players connect to
+  * Great for small player counts
+* Can create _unreliable_, UDP-like connections with higher performance
 
 ---
 
 # WebRTC for Games!
 
-* WebRTC has an `RTCDataChannel` API with a similar interface to WebSockets
-* Can create _unreliable_, UDP-like channels with higher performance
-* One player can act as a "host" that all other players connect to
+* WebRTC has an `RTCDataChannel` API we can use with a similar interface to WebSockets
+* Send arbitrary data between peers
+* Supports strings or binary data (`Blob` or `ArrayBuffer`)
 
 ---
 
@@ -48,7 +58,7 @@ class: middle, center
 
 ???
 
-So, when I was learning how this whole process worked, I had to learn how, like, eighteen different protocols and systems I'd never heard of worked, and I had to read a bunch of IETF RFCs. If you haven't read an IETF RFC, they're the documents that basically say "here's how this part of the internet is supposed to work," and they basically have about the same level of formatting as this slide deck.
+So, when I was learning how this whole process worked, I had to learn how, like, eighteen different protocols and systems I'd never heard of worked, and I wound up actually digging into IETF RFCs to understand some of them.
 
 ---
 
@@ -60,7 +70,7 @@ Or: "How does Browser A tell Browser B it wants to connect"?
 
 ???
 
-Instead, I'm going to try to give a brief overview of how browsers connect, without all the scary acronyms, and avoiding a lot of complex but common edge cases. This isn't complete but should give you a basic picture.
+Instead of explaining all of the various moving parts, I'm going to try to give a brief overview of how WebRTC peers connect, without all the scary acronyms, and avoiding a lot of complex but common edge cases. This isn't complete but should give you a basic picture.
 
 The public part of the process by which peers figure out how to connect to each other is called _signaling_, which is more or less passing messages back and forth between the peers through a developer-implemented signaling channel.
 
@@ -71,7 +81,7 @@ The public part of the process by which peers figure out how to connect to each 
 * WebRTC generates signaling *tokens*, big strings of text that say:
   * Here's my public IP you can connect to
   * Here's the video and audio codecs you could use
-* Lists multiple IPs so e.g. intranet connections use a local IP (192.168.x.x)
+* Lists multiple _candidate_ IPs so e.g. intranet connections use a local IP (192.168.x.x)
 * One end generates an _offer_ token, the other end takes that token and generates an _answer_ token and sends it back
 
 ---
@@ -86,32 +96,14 @@ The public part of the process by which peers figure out how to connect to each 
 
 * In most use cases: something like a central WebSockets server!
   * WebSockets instead of just plain HTTP allows for some more complex signaling scenarios we won't get into
-* For video games: think of signaling server like a "lobby" server. You tell the signaling server "I want to connect to this 'room'," it sends back the host player's token for that room
-
----
-
-# Using Data Channels
-
-* Once offer/answers are exchanged and peers successfully connect, create data channel(s)
-* Similar interface to WebSockets
-* Create on the offering client _before_ sending offer, since they're included in the offer token!
-
----
-
-# Using Data Channels
-
-* Can be created with options that disable TCP guarantees common to HTTP/WebSockets
-  * `maxRetransmits: 0` - don't try to resend packets
-  * `ordering: false` - don't enforce the order messages are received (prevent head-of-line blocking)
-* Can create more than one channel per connection (e.g. one reliable and one unreliable)
+* For video games: think of signaling server like a "lobby" server
+* A connecting client tells the signaling server "I want to connect to this 'room'," and sends an offer, and receives back the room host's answer token
 
 ---
 
 # Example: Sending Offer
 
 ```js
-import signalingServerSession from './signalingServerSession';
-
 const peer = new RTCPeerConnection({/* ... */});
 
 async function createAndSendOffer() {
@@ -174,13 +166,34 @@ signalingServerSession.on('receivedAnswer', async (answer) => {
 
 ---
 
+# Using Data Channels
+
+* When offer/answers are exchanged and peers successfully connect, you can use one or more data channels to communicate
+* Similar interface to WebSockets
+* Create on the offering client _before_ sending offer, since they're included in the offer token!
+  * (if you really want to you can create the channel afterwards and re-negotiate the offer but it's a pain)
+
+---
+
+# Using Data Channels
+
+* Can be created with options that disable TCP guarantees common to HTTP/WebSockets
+  * `maxRetransmits: 0` - don't try to resend packets
+  * `ordering: false` - don't enforce the order messages are received (prevent head-of-line blocking)
+* Can create more than one channel per connection (e.g. one reliable and one unreliable)
+
+---
+
 # Example: Data Channel
 
 ```js
 // on offering end, BEFORE creating offer:
 const peer = new RTCPeerConnection({/* ... */});
 
-const channel = peer.createDataChannel('my-channel');
+const channel = peer.createDataChannel('my-channel', {
+  maxRetransmits: 0,
+  ordering: false,
+});
 
 channel.onopen = () => {/* ... */};
 channel.onclose = () => {/* ... */};
@@ -209,6 +222,9 @@ class: center, middle
 
 * Have shortlink to already-set-up https://disco.zone/pong/?roomCode=XXXXX
 * Encourage ppl to join as spectator
+* Describe how networking code works
+  * Host data as just a simple snapshot to client
+  * Client sends messages telling host it's moving the paddle by some distance
 
 ---
 
@@ -223,6 +239,7 @@ class: center, middle
 
 # Code & Wrap-up
 
-* Thank you!!
-* Btw, I'm looking for a job! Check out my ~~soundcloud~~ resumé at https://thomasboyt.com
+* If you're curious about my actual WebRTC game project: https://devlog.disco.zone/2018/08/01/sledgehammer/
 * I also made some games you can play or read about at https://disco.zone
+* Btw, I'm looking for a job! Check out my ~~soundcloud~~ resumé at https://thomasboyt.com
+* Thank you!!

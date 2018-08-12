@@ -50,3 +50,7 @@ body:not(.remark-presenter-mode) .remark-slide-scaler {
 .remark-slide-content a:hover {
   text-decoration: none;
 }
+
+.title-slide-subhead {
+  color: black;
+}
