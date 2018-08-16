@@ -2,7 +2,14 @@ class: middle, center
 
 # Building a peer-to-peer video game with WebRTC!
 
-### .title-slide-subhead[Thomas Boyt &middot; BrooklynJS August 2018]
+### .title-slide-subhead[Thomas Boyt &middot; BrooklynJS August 2018 <br> [disco.zone/webrtc-talk](https://disco.zone/webrtc-talk)]
+
+
+???
+
+* Hit P for presentation mode (this)
+* Hit C to create new window
+* Hit T to reset timer when starting
 
 ---
 
@@ -230,7 +237,8 @@ class: center, middle
 
 # Code & Wrap-up
 
-* https://github.com/thomasboyt/brooklynjs-webrtc-pong
+* These slides: https://disco.zone/webrtc-talk
+* Code: https://github.com/thomasboyt/brooklynjs-webrtc-pong
   * Includes signaling server, client networking, and game code
 * Lots and lots of stuff couldn't be covered in this talk, but you should read the free [_High Performance Browser Networking_](https://hpbn.co/) book for details!
   * Chapter 3 (UDP, STUN, TURN, etc.) & Chapter 18 (WebRTC)
